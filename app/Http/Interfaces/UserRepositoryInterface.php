@@ -7,4 +7,5 @@ interface UserRepositoryInterface{
     function createUser($request);
     function updateUser($id, $request);
     function authUser($request);
+    function updateActive($id);
 }

@@ -24,6 +24,9 @@ class UserController extends Controller
     }
 
     public function authUser(Request $request){
-    return $this->userRepository->authUser($request);
+        return $this->userRepository->authUser($request);
+    }
+    public function updateActive($id){
+        return $this->userRepository->updateActive($id);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Http\Interfaces\UserRepositoryInterface;
+use App\Http\Resources\UniversalResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,9 @@ class UserRepository implements UserRepositoryInterface {
 
     public function getAllUser()
     {
-        return $this->user->all();
+        $search = request('search');
+        $data = $this->user->where('username', "ILIKE", $search)->orWhere('full_name', 'ILIKE', $search)->paginate();
+        return UniversalResource::collection($data);
     }
 
     public function createUser($request){
@@ -34,9 +37,10 @@ class UserRepository implements UserRepositoryInterface {
             'username' => $request->username ?? $user->username,
             'full_name' => $request->full_name ?? $user->full_name,
             'phone_number' => $request->phone_number ?? $user->phone_number,
-            'password' => $request->password ?? bcrypt($user->password),
+            'password' => bcrypt($request->phone_number) ?? $user->phone_number,
         ]);
-        return response()->json(['message' => 'The user has updated'], 200);
+        $user->save();
+        return response()->json(['message' => 'The user has updated']);
     }
 
     public function authUser($request){
@@ -51,9 +55,16 @@ class UserRepository implements UserRepositoryInterface {
         }
         if (Hash::check($password, $user->password)) {
             $token = $user->createToken("SECRET")?->plainTextToken;
-            return response()->json(["token" => $token, "error" => false], 200);
+            return response()->json(["access_token" => $token, "error" => false], 200);
         } else {
             return response()->json(['message' => 'Логин ёки парол нотўғри!', 'error' => true], 403, []);
         }
+    }
+
+    public function updateActive($id){
+        $user = $this->user->where('id', $id)->first();
+        $user->active = !$user->active;
+        $user->save();
+        return response()->json(['message' => 'The user has updated']);
     }
 }
