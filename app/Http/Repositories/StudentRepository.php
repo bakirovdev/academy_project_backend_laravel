@@ -16,7 +16,15 @@ class StudentRepository implements StudentRepositoryInterface {
 
     function getAllStudents()
     {
-        $data = $this->student->with(['region'])->paginate();
+        $dates = request('dates', []);
+        $data = $this->student
+            ->with(['region'])
+            ->where(function($query) use ($dates){
+                if (count($dates) > 1) {
+                    return $query->whereBetween('created_at', $dates);
+                }
+            })
+            ->paginate();
         return StudentResource::collection($data);
     }
 
@@ -44,5 +52,15 @@ class StudentRepository implements StudentRepositoryInterface {
         ]);
         $student->save();
         return response()->json(['message' => 'The user just has updated']);
+    }
+
+    function checkStudent($id, $status){
+        $student = $this->student->where('id', $id)->first();
+        if ($student->status == 'waiting') {
+            $student->status = $status;
+            $student->save();
+            return response()->json(['message' => "The user just has $status"]);
+        }
+        return response()->json(['message' => "Already had $student->status"], 400);
     }
 }

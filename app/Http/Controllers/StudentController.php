@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Interfaces\StudentRepositoryInterface;
 use App\Http\Requests\StudentCreateRequest;
-use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -23,5 +22,8 @@ class StudentController extends Controller
 
     function update($id, StudentCreateRequest $request){
         return $this->studentRepository->updateStudent($id, $request);
+    }
+    function checkStudent($id, Request $request){
+        return $this->studentRepository->checkStudent($id, $request->status);
     }
 }
