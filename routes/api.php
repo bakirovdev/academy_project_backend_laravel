@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Routes\CourseRouter;
+use App\Http\Routes\GroupRouter;
 use App\Http\Routes\OpenRouter;
 use App\Http\Routes\RegionRouter;
 use App\Http\Routes\StudentRouter;
@@ -15,5 +16,6 @@ Route::middleware('auth:sanctum')->group(function () {
     StudentRouter::routes();
     CourseRouter::routes();
     TimeRouter::routes();
+    GroupRouter::routes();
 });
 OpenRouter::routes();

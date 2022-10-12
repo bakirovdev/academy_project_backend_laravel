@@ -1,7 +1,9 @@
-<?php 
+<?php
 
-namespace App\Http\Interfaces; 
+namespace App\Http\Interfaces;
 
-interface GroupRepositoryInterface { 
- //
+interface GroupRepositoryInterface {
+  function getAllGroup();
+  function createGroup($request);
+  function updateGroup($id, $request);
 }
