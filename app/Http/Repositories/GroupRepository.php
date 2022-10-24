@@ -4,21 +4,23 @@ namespace App\Http\Repositories;
 
 use App\Http\Interfaces\GroupRepositoryInterface;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\UniversalResource;
 use App\Models\Group;
 use App\Models\GroupTime;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GroupRepository implements GroupRepositoryInterface {
     function __construct(
         private Group $group,
-        private GroupTime $groupTime
+        private GroupTime $groupTime,
     ){}
 
     function getAllGroup()
     {
         $search = request('search', "");
         $data = $this->group
-            ->with(['course'])
+            ->with(['course', 'groupTeacher.user:id,full_name'])
             ->where('title', "ILIKE", "%$search%")
             ->get();
         return GroupResource::collection($data);
@@ -94,4 +96,27 @@ class GroupRepository implements GroupRepositoryInterface {
             ]);
         }
     }
+    public function findGroup($id){
+        $data = $this->group
+            ->with(['course', 'groupTeacher.user:id,full_name'])
+            ->where('id', $id)
+            ->first();
+        return GroupResource::make($data);
+    }
+
+    public function getAuthGroup(){
+        $user = Auth::user();
+        $search = request('search', "");
+        $data = $this->group
+            ->whereHas('groupTeacher', function($query) use ($user){
+                return $query->where('id', $user->id);
+            })
+            ->with(['course', 'groupPrice'])
+            ->where('title', "ILIKE", "%$search%")
+            ->get();
+        return GroupResource::collection($data);
+    }
+
+
+
 }

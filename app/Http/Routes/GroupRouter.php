@@ -8,7 +8,9 @@ class GroupRouter {
 
     public static function routes(){
         Route::get('/groups', [GroupController::class, 'getAllGroup']);
-        Route::post('/groups', [GroupController::class, 'createGroup']);
+        Route::get('/groups/{id}', [GroupController::class, 'findGroup']);
+        Route::get('/group/user', [GroupController::class, 'getAuthGroup']);
         Route::patch('/groups/{id}', [GroupController::class, 'updateGroup']);
+        Route::post('/groups', [GroupController::class, 'createGroup']);
     }
 }

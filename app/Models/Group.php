@@ -19,4 +19,12 @@ class Group extends Model
     public function course(){
         return $this->hasOne(Course::class, 'id', 'course_id');
     }
+
+    public function groupTeacher(){
+        return $this->hasMany(GroupTeacher::class, 'group_id', 'id');
+    }
+
+    public function groupPrice(){
+        return $this->hasMany(GroupPrice::class, 'group_id', 'id');
+    }
 }

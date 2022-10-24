@@ -23,4 +23,14 @@ class GroupController extends Controller
     function updateGroup($id, CreateUpdateGroupRequest $request){
         return $this->groupRepository->updateGroup($id, $request);
     }
+
+    function getAuthGroup(){
+        return $this->groupRepository->getAuthGroup();
+    }
+
+    function findGroup($id){
+        // return $id;
+        return $this->groupRepository->findGroup($id);
+    }
+
 }

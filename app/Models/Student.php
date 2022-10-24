@@ -22,4 +22,12 @@ class Student extends Model
     public function region(){
         return $this->hasOne(Region::class, 'id', 'region_id');
     }
+
+    public function group_students(){
+        return $this->hasMany(GroupStudent::class, 'student_id', 'id');
+    }
+
+    public function student_money(){
+        return $this->hasOne(StudentMoney::class, 'student_id', 'id');
+    }
 }
