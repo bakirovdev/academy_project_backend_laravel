@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('student_money', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('full_name', 60);
-            $table->string('phone_number', 20);
+            $table->integer('student_id');
+            $table->double('value');
             $table->boolean('active')->default(true);
-            $table->string('password');
-            $table->rememberToken();
+            $table->date('date');
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('students')->restrictOnDelete();
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('student_money');
     }
 };

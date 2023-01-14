@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('group_teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('full_name', 60);
-            $table->string('phone_number', 20);
+            $table->integer('group_id');
+            $table->integer('user_id');
             $table->boolean('active')->default(true);
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('group_id')->references('id')->on('groups')->restrictOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('group_teachers');
     }
 };

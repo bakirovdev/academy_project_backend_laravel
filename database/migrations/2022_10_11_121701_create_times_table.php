@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('times', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('full_name', 60);
-            $table->string('phone_number', 20);
+            $table->enum('week', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+            $table->time('start_time');
+            $table->time('end_time');
             $table->boolean('active')->default(true);
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('times');
     }
 };
